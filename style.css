@@ -1,0 +1,72 @@
+button:focus {
+    outline: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+input {
+    border-radius: 4px;
+    -webkit-transition: all 0.30s ease-in-out;
+    -moz-transition: all 0.30s ease-in-out;
+    -ms-transition: all 0.30s ease-in-out;
+    -o-transition: all 0.30s ease-in-out;
+    outline: none;
+    padding: 3px 0px 3px 3px;
+    margin: 5px 1px 3px 0px;
+    border: 1px solid rgba(0, 0, 0, 0.086);
+}
+
+input:focus {
+    outline: 1px !important;
+    border: 1px !important;
+    padding: 3px 0px 3px 3px;
+    margin: 5px 1px 3px 0px;
+    border: 1px solid rgba(0, 0, 0, 0.086);
+}
+
+
+#okButton{
+    background-color: rgb(4, 69, 175);
+    color: rgb(255, 255, 255);
+    border-radius: 4px;
+    padding: 6px 14px;
+    min-height: 40px;
+}
+
+
+#previousQuestion,#nextQuestion{
+    background-color: rgb(4, 69, 175);
+    width: 36px;
+    min-width: 36px;
+    color: rgb(255, 255, 255);
+    border-radius: 4px;
+
+}
+
+.list-group-item .list-group-item-action .active{
+    background-color: rgb(4, 69, 175);
+}
+
+#savebuttoncontainer{
+    margin-top: 2%;
+    margin-left: 1%;
+}
+
+
+
+#footer {
+    /* top: 0px;  you can delete these two lines if you want the position as it is */
+    position:fixed;
+    margin-top: 10px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+@media screen and (min-width:500px){
+    #footer { bottom: 0px; }
+}
+
+
+
+
+

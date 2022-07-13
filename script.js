@@ -196,14 +196,20 @@ function displayQuestion() {
 
         }else if(questions[currentQuestion].type == 3){
 
-            let textarea_html =  `<textarea class="form-control active" name="" id="" cols="30" rows="10"></textarea>`;
+            let textarea_html =  `<textarea class="form-control active" name="" id="text_area_${currentQuestion}" cols="30" rows="10"></textarea>`;
             choiceContainer.innerHTML = textarea_html;
 
         }else if(questions[currentQuestion].type == 4){
 
            let radio_html ='';
            for(let i=1;i<=10;i++){
-            radio_html += `<label><input type="radio" name="rating${currentQuestion}" value="${i}" /><span class="border rounded px-3 py-2">${i}</span></label>`
+
+            if(questions[currentQuestion].id in answerList && answerList[questions[currentQuestion].id].includes(i) ){
+                radio_html += `<label><input type="radio" id="${currentQuestion}'_'${i}" name="rating${currentQuestion}" value="${i}" checked/><span class="border rounded px-3 py-2">${i}</span></label>`
+            }else{
+                radio_html += `<label><input type="radio" id="${currentQuestion}'_'${i}" name="rating${currentQuestion}" value="${i}" /><span class="border rounded px-3 py-2">${i}</span></label>`
+            }
+           
            }
 
           let nps_question = `
@@ -220,15 +226,30 @@ function displayQuestion() {
         }else if(questions[currentQuestion].type == 5){
 
             let choices_html = `<th>&nbsp;</th>`;
-            let radio_buttons = '';
+           
             let tag_with_radio = '';
             for(let i=0;i<questions[currentQuestion].choices.length;i++){
                 choices_html += `<th width="15%"><label>${questions[currentQuestion].choices[i]}</label></th>`;
 
-                radio_buttons +=`<td><input type="radio" id="qstn_4_${i}" name="qstn_4_${i}" value=${questions[currentQuestion].choices[i]} class="likertRadio"></td>`
+                
             }
 
             for(let j=0;j<questions[currentQuestion].tag.length;j++){
+                let radio_buttons = '';
+                
+                for(let k=0;k<questions[currentQuestion].choices.length;k++){
+
+                    if(questions[currentQuestion].id in answerList && questions[currentQuestion].tag[j] in answerList[questions[currentQuestion].id] && questions[currentQuestion].choices[k] == answerList[questions[currentQuestion].id][questions[currentQuestion].tag[j]]  ){
+                        radio_buttons +=`<td><input type="radio" id="${currentQuestion}${j}" name="${questions[currentQuestion].tag[j]}" value="${questions[currentQuestion].choices[k]}" class="likertRadio" checked></td>`
+
+                    }else{
+                        radio_buttons +=`<td><input type="radio" id="${currentQuestion}${j}" name="${questions[currentQuestion].tag[j]}" value="${questions[currentQuestion].choices[k]}" class="likertRadio"></td>`
+                    }
+
+
+                }
+
+
                 tag_with_radio += `<tr style="text-align:center;">
                 <th style="text-align:left;">
                 <label id="label_"${currentQuestion}>${questions[currentQuestion].tag[j]}</label>
@@ -279,17 +300,27 @@ function multipleselectAnswer(){
 function checkAnswer() {
     let question_id = document.querySelector('#questionId');
 
-    if(questions[currentQuestion].type in [1,2,3] ){
-        answerList[question_id.getAttribute('value')] = $('.active').map((_,el) => el.value).get()
-    }else if(questions[currentQuestion].type == 4){
+    if(questions[currentQuestion].type == 1 && $('.active').map((_,el) => el.value).get().length !=0 ){
+        // alert($('.active').map((_,el) => el.value).get());
+        answerList[question_id.getAttribute('value')] = $('.active').map((_,el) => el.value).get();
+    }else if(questions[currentQuestion].type == 2 && $('.active').map((_,el) => el.value).get().length !=0){
+        answerList[question_id.getAttribute('value')] = $('.active').map((_,el) => el.value).get();
+    }else if(questions[currentQuestion].type == 4 && document.querySelector(`input[name="rating${currentQuestion}"]:checked`) != null){
         answerList[question_id.getAttribute('value')] = document.querySelector(`input[name="rating${currentQuestion}"]:checked`).value;
-    }else if(questions[currentQuestion].type == 5){
-
+    }else if(questions[currentQuestion].type == 5 && document.querySelector(`.likertRadio:checked`) != null ){
+        answerList[question_id.getAttribute('value')] = {};
+        for(let i=0;i<questions[currentQuestion].tag.length;i++){
+            if(document.querySelector(`input[id="${currentQuestion}${i}"]:checked`)){
+                answerList[question_id.getAttribute('value')][questions[currentQuestion].tag[i]] = document.querySelector(`input[id="${currentQuestion}${i}"]:checked`).value;
+            }
+            
+        }
+        // answerList[question_id.getAttribute('value')] = document.querySelector(`input[name="rating${currentQuestion}"]:checked`).value;
+    }else if (questions[currentQuestion].type == 3 && document.querySelector(`#text_area_${currentQuestion}`).value != ""){
+        answerList[question_id.getAttribute('value')] = document.querySelector(`#text_area_${currentQuestion}`).value;
     }
-    // else{
-    //     answerList[question_id.getAttribute('value')] = $('.active').map((_,el) => el.value).get()
 
-    // }
+
     progress_value = ((Object.keys(answerList).length*100)/questions.length) - 1
     topbar.progress('.'+progress_value)
     // alert(JSON.stringify(answerList))

@@ -1,3 +1,8 @@
+.container{
+    margin-top: 10%;
+
+}
+
 button:focus {
     outline: 0 !important;
     border: 0 !important;
@@ -70,3 +75,31 @@ input:focus {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+  .rating-input-wrapper input[type="radio"] {
+    display: none;
+  }
+  .rating-input-wrapper input[type="radio"] ~ span {
+    cursor: pointer;
+  }
+  .rating-input-wrapper input[type="radio"]:checked ~ span {
+    background-color:  rgb(4, 69, 175);
+    color: #fff;
+  }
+  .rating-labels > label{
+    font-size: 14px;
+      color: #777;
+  }
+  

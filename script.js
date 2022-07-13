@@ -77,6 +77,8 @@ topbar.show();
 // single select = 1
 // multiple select = 2
 // text box = 3
+// nps = 4
+// matrix question = 5
 
 
 var questions = [
@@ -88,7 +90,7 @@ var questions = [
         "B. 2", 
         "C. 6",
         "D. None of the above"],
-        answer: "A. 4"},  
+    },  
     {
         id:2,
         type:1,
@@ -97,31 +99,25 @@ var questions = [
         "B. 257", 
         "C. 167",
         "D. 206"],
-        answer: "D. 206"},
+    },
     {   
         id:3,
-        type:1,
+        type:5,
         question: "3. Which Country Does The Sport Football Come From?",
-        choices: ["A. Italy", 
-        "B. France", 
-        "C. England",
-        "D. Portugal"],
-        answer: "C. England"},
+        choices: ["Very Bad","Bad","Average","Good","Best"],
+        tag : ["Response","react","comple" ],
+    },
     {
         id:4,
-        type:1,
+        type:4,
         question: "4. How Many Sides Do Three Triangles And Three Rectangles Have In Total?",
-        choices: ["A. 20", 
-        "B. 21", 
-        "C. 22",
-        "D. 23"],
-        answer: "B. 21"},
-        {
-            id:5,
-            type:3,
-            question: "5. How Many Sides Do Three Triangles And Three Rectangles Have In Total?",
+    },
+    {
+        id:5,
+        type:3,
+        question: "5. How Many Sides Do Three Triangles And Three Rectangles Have In Total?",
 
-        }
+    }
 
 
 ];
@@ -203,6 +199,56 @@ function displayQuestion() {
             let textarea_html =  `<textarea class="form-control active" name="" id="" cols="30" rows="10"></textarea>`;
             choiceContainer.innerHTML = textarea_html;
 
+        }else if(questions[currentQuestion].type == 4){
+
+           let radio_html ='';
+           for(let i=1;i<=10;i++){
+            radio_html += `<label><input type="radio" name="rating${currentQuestion}" value="${i}" /><span class="border rounded px-3 py-2">${i}</span></label>`
+           }
+
+          let nps_question = `
+           
+            <div class="rating-input-wrapper d-flex justify-content-between mt-2">
+                ${radio_html}
+            </div>
+            <div class="rating-labels d-flex justify-content-between mt-1">
+              <label>Very unlikely</label>
+              <label>Very likely</label>
+            </div>`
+
+            choiceContainer.innerHTML = nps_question;
+        }else if(questions[currentQuestion].type == 5){
+
+            let choices_html = `<th>&nbsp;</th>`;
+            let radio_buttons = '';
+            let tag_with_radio = '';
+            for(let i=0;i<questions[currentQuestion].choices.length;i++){
+                choices_html += `<th width="15%"><label>${questions[currentQuestion].choices[i]}</label></th>`;
+
+                radio_buttons +=`<td><input type="radio" id="qstn_4_${i}" name="qstn_4_${i}" value=${questions[currentQuestion].choices[i]} class="likertRadio"></td>`
+            }
+
+            for(let j=0;j<questions[currentQuestion].tag.length;j++){
+                tag_with_radio += `<tr style="text-align:center;">
+                <th style="text-align:left;">
+                <label id="label_"${currentQuestion}>${questions[currentQuestion].tag[j]}</label>
+               </th>                              
+               ${radio_buttons}                
+              </tr> `
+            
+            }   
+
+            let matrix_feedback = `<table border="0">
+            <tbody>
+              <tr style="text-align: center;">
+              ${choices_html}
+              </tr>
+              ${tag_with_radio}
+         </tbody>
+         </table>`
+
+         choiceContainer.innerHTML = matrix_feedback;
+
         }
 
    
@@ -233,12 +279,17 @@ function multipleselectAnswer(){
 function checkAnswer() {
     let question_id = document.querySelector('#questionId');
 
-    if(questions[currentQuestion].id in answerList){
+    if(questions[currentQuestion].type in [1,2,3] ){
         answerList[question_id.getAttribute('value')] = $('.active').map((_,el) => el.value).get()
-    }else{
-        answerList[question_id.getAttribute('value')] = $('.active').map((_,el) => el.value).get()
+    }else if(questions[currentQuestion].type == 4){
+        answerList[question_id.getAttribute('value')] = document.querySelector(`input[name="rating${currentQuestion}"]:checked`).value;
+    }else if(questions[currentQuestion].type == 5){
 
     }
+    // else{
+    //     answerList[question_id.getAttribute('value')] = $('.active').map((_,el) => el.value).get()
+
+    // }
     progress_value = ((Object.keys(answerList).length*100)/questions.length) - 1
     topbar.progress('.'+progress_value)
     // alert(JSON.stringify(answerList))

@@ -79,6 +79,8 @@ topbar.show();
 // text box = 3
 // nps = 4
 // matrix question = 5
+// star = 6
+// drop down = 7
 
 
 var questions = [
@@ -117,7 +119,25 @@ var questions = [
         type:3,
         question: "5. How Many Sides Do Three Triangles And Three Rectangles Have In Total?",
 
-    }
+    },
+    {
+        id:6,
+        type:6,
+        question: "6. How Many Sides Do Three Triangles And Three Rectangles Have In Total?",
+
+    },
+    {
+        id:7,
+        type:7,
+        question: "7. How Many Sides Do Three Triangles And Three Rectangles Have In Total?",
+        choices: ["Very Bad","Bad","Average","Good","Best"],
+
+    },
+    {
+        id:8,
+        type:4,
+        question: "8. How Many Sides Do Three Triangles And Three Rectangles Have In Total?",
+    },
 
 
 ];
@@ -270,7 +290,54 @@ function displayQuestion() {
 
          choiceContainer.innerHTML = matrix_feedback;
 
+        }else if(questions[currentQuestion].type == 6){
+            let star_rating ="";
+
+          for(let i =10;i>=1;i--){
+            // alert(answerList[currentQuestion]*20)
+            
+            // if(questions[currentQuestion].id in answerList && answerList[questions[currentQuestion].id]*20 == i*10){
+            //     console.log(answerList[questions[currentQuestion].id]*20 >= i*10,i)
+            //     star_rating += `<input id="score${i*10}" class="ratingControl__radio" type="radio" name="rating${currentQuestion}" value="${i*10}" checked/>
+            //     <label for="score${i*10}" class="ratingControl__star" title="Half 1 Star"></label>`
+            //     // $(`#score${i*10}`).click()
+
+            // }else{
+
+                star_rating += `<input id="score${i*10}" class="ratingControl__radio" type="radio" name="rating${currentQuestion}" value="${i*10}" />
+                <label for="score${i*10}" class="ratingControl__star" title="Half Star"></label>`
+
+            // }
+           
+          }
+
+     
+
+          choiceContainer.innerHTML = `<div class="ratingControl">${star_rating}</div>`;
+          if(questions[currentQuestion].id in answerList){
+            // alert(`${answerList[questions[currentQuestion].id]*20}`)
+            document.getElementById(`score${answerList[questions[currentQuestion].id]*20}`).checked = true;
+            // $(`#score${answerList[questions[currentQuestion].id]*10}`).sttr("checked", "checked");
+          }
+
+        }else if(questions[currentQuestion].type == 7){
+
+            let options_html = "<option>Select Value</option>";
+
+            for(let i=0;i<questions[currentQuestion].choices.length;i++){
+                if(questions[currentQuestion].id in answerList && answerList[questions[currentQuestion].id] == questions[currentQuestion].choices[i]){
+                    options_html += `<option value="${questions[currentQuestion].choices[i]}" selected>${questions[currentQuestion].choices[i]}</option>`;
+                }else{
+                    options_html += `<option value="${questions[currentQuestion].choices[i]}">${questions[currentQuestion].choices[i]}</option>`;
+                }
+               
+            }
+          
+             choiceContainer.innerHTML = `<select id="select_${currentQuestion}" class="form-control">${options_html}</select>`;
+
+
         }
+
 
    
 
@@ -318,6 +385,10 @@ function checkAnswer() {
         // answerList[question_id.getAttribute('value')] = document.querySelector(`input[name="rating${currentQuestion}"]:checked`).value;
     }else if (questions[currentQuestion].type == 3 && document.querySelector(`#text_area_${currentQuestion}`).value != ""){
         answerList[question_id.getAttribute('value')] = document.querySelector(`#text_area_${currentQuestion}`).value;
+    }else if(questions[currentQuestion].type == 6 && document.querySelector(`input[name="rating${currentQuestion}"]:checked`) != null){
+        answerList[question_id.getAttribute('value')] = document.querySelector(`input[name="rating${currentQuestion}"]:checked`).value/20;
+    }else if(questions[currentQuestion].type == 7 && document.querySelector(`#select_${currentQuestion}`).value != ""){
+        answerList[question_id.getAttribute('value')] = document.querySelector(`#select_${currentQuestion}`).value;
     }
 
 

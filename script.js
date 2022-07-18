@@ -32,7 +32,7 @@ document.addEventListener('keypress', function(e) {
         console.log(event.keyCode)
    
         event.stopImmediatePropagation();
-        if(questions[currentQuestion].type == 2){
+        if(questions[currentQuestion].type == "Checkbox"){
             console.log("multiple select");
             console.log($(`#${event.keyCode}`).attr('class').split(/\s+/));
 
@@ -43,7 +43,7 @@ document.addEventListener('keypress', function(e) {
                 console.log("add class")
                 $(`#${event.keyCode}`).addClass('active');
                 }
-        }else if (questions[currentQuestion].type == 1){
+        }else if (questions[currentQuestion].type == "Radio"){
             console.log("single")
             if(document.querySelector('.active')){
                 document.querySelector('.active').classList.remove('active')
@@ -74,80 +74,114 @@ topbar.config({
 topbar.show();
 
 
-// single select = 1
-// multiple select = 2
-// text box = 3
-// nps = 4
-// matrix question = 5
-// star = 6
-// drop down = 7
+// single select = 1   - Radio
+// multiple select = 2   - Checkbox
+// text box = 3    - TextArea
+// nps = 4   -   NPS
+// matrix question = 5  -  Likert
+// star = 6   - Rating
+// drop down = 7  - Picklist
+// input box =  8  -  Text
+// multiple select drop down =  9 Multi-Select Picklist
+
+// var questions = "";
+
+// var surveyID = document.getElementById("myHiddenId").value;
+
+
+// fetch(`https://online.syngenta.com/ampscript1?surveyID=${surveyID}`).then(res => res.text()).then((text) =>{
+//     console.log(text);
+//     console.log(JSON.parse(text));
+
+// }).catch((err) =>{
+//     console.log(err);
+// })
+
+
+
+
+
 
 
 var questions = [
-      {
-        id:1,
-        type:2,
-        question: "1. If there are 6 apples and you take away 4, how many do you have?",
-        choices: ["A. 4", 
-        "B. 2", 
-        "C. 6",
-        "D. None of the above"],
-    },  
     {
-        id:2,
-        type:1,
-        question: "2. How Many Bones Does An Adult Human Have?",
-        choices: ["A. 310", 
-        "B. 257", 
-        "C. 167",
-        "D. 206"],
-    },
-    {   
-        id:3,
-        type:5,
-        question: "3. Which Country Does The Sport Football Come From?",
-        choices: ["Very Bad","Bad","Average","Good","Best"],
-        tag : ["Response","react","comple" ],
+        "Position": "1",
+        "type": "NPS",
+        "question": "NPS Survey Question?",
+        "choices": "",
+        "Tag": ""
     },
     {
-        id:4,
-        type:4,
-        question: "4. How Many Sides Do Three Triangles And Three Rectangles Have In Total?",
-    },
-    {
-        id:5,
-        type:3,
-        question: "5. How Many Sides Do Three Triangles And Three Rectangles Have In Total?",
-
-    },
-    {
-        id:6,
-        type:6,
-        question: "6. How Many Sides Do Three Triangles And Three Rectangles Have In Total?",
-
-    },
-    {
-        id:7,
-        type:7,
-        question: "7. How Many Sides Do Three Triangles And Three Rectangles Have In Total?",
-        choices: ["Very Bad","Bad","Average","Good","Best"],
-
-    },
-    {
-        id:8,
-        type:4,
-        question: "8. How Many Sides Do Three Triangles And Three Rectangles Have In Total?",
+        "Position": "2",
+        "type": "Radio",
+        "question": "Customer Satisfaction Survey?",
+        "choices": "Not satisfied at all; Somewhat unsatisfied; Neutral, Somewhat satisfied; Completely satisfied",
+        "Tag": ""
     },
 
+{
+        "Position": "3",
+        "type": "Likert",
+        "question": "Please provide your feedback about Syngenta Experience",
+        "choices": "Very Bad; Bad; Average; Good; Best",
+        "Tag": "Responses; Deliverability; Customer Satisfaction"
+    },
 
-];
+{
+        "Position": "4",
+        "type": "Picklist",
+        "question": "Select Picklist example?",
+        "choices": "One; Two; Three; Four; Five",
+        "Tag": ""
+    },
+
+{
+        "Position": "5",
+        "type": "Multi-Select Picklist",
+        "question": "Multi-Select Picklist?",
+        "choices": "One; Two; Three; Four; Five",
+        "Tag": ""
+    },
+
+{
+        "Position": "6",
+        "type": "Checkbox",
+        "question": "Check Box example?",
+        "choices": "One; Two; Three; Four; Five",
+        "Tag": ""
+    },
+
+{
+        "Position": "7",
+        "type": "Rating",
+        "question": "Rating example?",
+        "choices": "",
+        "Tag": ""
+    },
+
+{
+        "Position": "8",
+        "type": "Text",
+        "question": "Text Question example?",
+        "choices": "",
+        "Tag": ""
+    },
+
+{
+        "Position": "9",
+        "type": "TextArea",
+        "question": "TextArea example",
+        "choices": "",
+        "Tag": ""
+    },
+]
 
 
 
 // topbar.progress('+.'+progress_value)
 
-displayQuestion();
 
+displayQuestion();
 
 
 
@@ -162,7 +196,7 @@ function displayQuestion() {
         document.body.style.background = 'transparent';
         let h5Question = document.createElement('h5');
         h5Question.setAttribute('id', 'questionId');
-        h5Question.setAttribute('value', questions[currentQuestion].id);
+        h5Question.setAttribute('value', questions[currentQuestion].Position);
         h5Question.className = 'list-group-item list-group-item-action list-group-item-warning .disabled';
         h5Question.innerHTML = questions[currentQuestion].question;
         questionContainer.appendChild(h5Question);
@@ -177,54 +211,63 @@ function displayQuestion() {
 
         }
 
-        if(questions[currentQuestion].type == 1){
+        if(questions[currentQuestion].type == "Radio"){
 
-            for (let i = 0; i < questions[currentQuestion].choices.length; i++) {
+            let choices = questions[currentQuestion].choices.split(";")
+
+            for (let i = 0; i < choices.length; i++) {
                 var btnChoices = document.createElement('button');
                 btnChoices.innerHTML = '';
                 btnChoices.className = 'list-group-item list-group-item-action';
-                btnChoices.innerHTML = questions[currentQuestion].choices[i];
-                btnChoices.setAttribute('value', questions[currentQuestion].choices[i]);
+                btnChoices.innerHTML = choices[i];
+                btnChoices.setAttribute('value', choices[i]);
                 choiceContainer.appendChild(btnChoices);
                 btnChoices.setAttribute('id',choice_id+i);
                 btnChoices.onclick = selectAnswer;
-                console.log(questions[currentQuestion].id in answerList )
-                if(questions[currentQuestion].id in answerList && answerList[questions[currentQuestion].id]==questions[currentQuestion].choices[i] ){
+                console.log(questions[currentQuestion].Position in answerList )
+                if(questions[currentQuestion].Position in answerList && answerList[questions[currentQuestion].Position]== choices[i] ){
                     btnChoices.classList.add('active');
                 }
                 
             }
 
-        }else if(questions[currentQuestion].type == 2){
+        }else if(questions[currentQuestion].type == "Checkbox"){
+            let choices = questions[currentQuestion].choices.split(";")
 
-            for (let i = 0; i < questions[currentQuestion].choices.length; i++) {
+            for (let i = 0; i < choices.length; i++) {
                 var btnChoices = document.createElement('button');
                 btnChoices.innerHTML = '';
                 btnChoices.className = 'list-group-item list-group-item-action';
-                btnChoices.innerHTML = questions[currentQuestion].choices[i];
-                btnChoices.setAttribute('value', questions[currentQuestion].choices[i]);
+                btnChoices.innerHTML = choices[i];
+                btnChoices.setAttribute('value', choices[i]);
                 choiceContainer.appendChild(btnChoices);
                 btnChoices.setAttribute('id',choice_id+i);
                 btnChoices.onclick = multipleselectAnswer;
                 
-                if(questions[currentQuestion].id in answerList && answerList[questions[currentQuestion].id].includes(questions[currentQuestion].choices[i] )){
+                if(questions[currentQuestion].Position in answerList && answerList[questions[currentQuestion].Position].includes(choices[i] )){
                  
                     btnChoices.classList.add('active');
                 }
                 
             }
 
-        }else if(questions[currentQuestion].type == 3){
+        }else if(questions[currentQuestion].type == "TextArea"){
 
-            let textarea_html =  `<textarea class="form-control active" name="" id="text_area_${currentQuestion}" cols="30" rows="10"></textarea>`;
+            let textarea_html = `<textarea class="form-control active" name="" id="text_area_${currentQuestion}" cols="30" rows="10"></textarea>`;
             choiceContainer.innerHTML = textarea_html;
 
-        }else if(questions[currentQuestion].type == 4){
+            if(questions[currentQuestion].Position in answerList){
+
+                document.querySelector(`#text_area_${currentQuestion}`).value = answerList[questions[currentQuestion].Position]
+            }
+  
+
+        }else if(questions[currentQuestion].type == "NPS"){
 
            let radio_html ='';
            for(let i=1;i<=10;i++){
 
-            if(questions[currentQuestion].id in answerList && answerList[questions[currentQuestion].id].includes(i) ){
+            if(questions[currentQuestion].Position in answerList && answerList[questions[currentQuestion].Position].includes(i) ){
                 radio_html += `<label><input type="radio" id="${currentQuestion}'_'${i}" name="rating${currentQuestion}" value="${i}" checked/><span class="border rounded px-3 py-2">${i}</span></label>`
             }else{
                 radio_html += `<label><input type="radio" id="${currentQuestion}'_'${i}" name="rating${currentQuestion}" value="${i}" /><span class="border rounded px-3 py-2">${i}</span></label>`
@@ -243,27 +286,29 @@ function displayQuestion() {
             </div>`
 
             choiceContainer.innerHTML = nps_question;
-        }else if(questions[currentQuestion].type == 5){
+        }else if(questions[currentQuestion].type == "Likert"){
 
+            let choices = questions[currentQuestion].choices.split(";")
+            let tag = questions[currentQuestion].Tag.split(";")
             let choices_html = `<th>&nbsp;</th>`;
            
             let tag_with_radio = '';
-            for(let i=0;i<questions[currentQuestion].choices.length;i++){
-                choices_html += `<th width="15%"><label>${questions[currentQuestion].choices[i]}</label></th>`;
+            for(let i=0;i<choices.length;i++){
+                choices_html += `<th width="15%"><label>${choices[i]}</label></th>`;
 
                 
             }
 
-            for(let j=0;j<questions[currentQuestion].tag.length;j++){
+            for(let j=0;j<tag.length;j++){
                 let radio_buttons = '';
                 
-                for(let k=0;k<questions[currentQuestion].choices.length;k++){
+                for(let k=0;k<choices.length;k++){
 
-                    if(questions[currentQuestion].id in answerList && questions[currentQuestion].tag[j] in answerList[questions[currentQuestion].id] && questions[currentQuestion].choices[k] == answerList[questions[currentQuestion].id][questions[currentQuestion].tag[j]]  ){
-                        radio_buttons +=`<td><input type="radio" id="${currentQuestion}${j}" name="${questions[currentQuestion].tag[j]}" value="${questions[currentQuestion].choices[k]}" class="likertRadio" checked></td>`
+                    if(questions[currentQuestion].Position in answerList && tag[j] in answerList[questions[currentQuestion].Position] && choices[k] == answerList[questions[currentQuestion].Position][tag[j]]  ){
+                        radio_buttons +=`<td><input type="radio" id="${currentQuestion}${j}" name="${tag[j]}" value="${choices[k]}" class="likertRadio" checked></td>`
 
                     }else{
-                        radio_buttons +=`<td><input type="radio" id="${currentQuestion}${j}" name="${questions[currentQuestion].tag[j]}" value="${questions[currentQuestion].choices[k]}" class="likertRadio"></td>`
+                        radio_buttons +=`<td><input type="radio" id="${currentQuestion}${j}" name="${tag[j]}" value="${choices[k]}" class="likertRadio"></td>`
                     }
 
 
@@ -272,7 +317,7 @@ function displayQuestion() {
 
                 tag_with_radio += `<tr style="text-align:center;">
                 <th style="text-align:left;">
-                <label id="label_"${currentQuestion}>${questions[currentQuestion].tag[j]}</label>
+                <label id="label_"${currentQuestion}>${tag[j]}</label>
                </th>                              
                ${radio_buttons}                
               </tr> `
@@ -290,45 +335,35 @@ function displayQuestion() {
 
          choiceContainer.innerHTML = matrix_feedback;
 
-        }else if(questions[currentQuestion].type == 6){
+        }else if(questions[currentQuestion].type == "Rating"){
             let star_rating ="";
 
           for(let i =10;i>=1;i--){
-            // alert(answerList[currentQuestion]*20)
-            
-            // if(questions[currentQuestion].id in answerList && answerList[questions[currentQuestion].id]*20 == i*10){
-            //     console.log(answerList[questions[currentQuestion].id]*20 >= i*10,i)
-            //     star_rating += `<input id="score${i*10}" class="ratingControl__radio" type="radio" name="rating${currentQuestion}" value="${i*10}" checked/>
-            //     <label for="score${i*10}" class="ratingControl__star" title="Half 1 Star"></label>`
-            //     // $(`#score${i*10}`).click()
-
-            // }else{
 
                 star_rating += `<input id="score${i*10}" class="ratingControl__radio" type="radio" name="rating${currentQuestion}" value="${i*10}" />
                 <label for="score${i*10}" class="ratingControl__star" title="Half Star"></label>`
 
-            // }
            
           }
 
      
 
           choiceContainer.innerHTML = `<div class="ratingControl">${star_rating}</div>`;
-          if(questions[currentQuestion].id in answerList){
-            // alert(`${answerList[questions[currentQuestion].id]*20}`)
-            document.getElementById(`score${answerList[questions[currentQuestion].id]*20}`).checked = true;
-            // $(`#score${answerList[questions[currentQuestion].id]*10}`).sttr("checked", "checked");
+          if(questions[currentQuestion].Position in answerList){
+            // alert(`${answerList[questions[currentQuestion].Position]*20}`)
+            document.getElementById(`score${answerList[questions[currentQuestion].Position]*20}`).checked = true;
+            // $(`#score${answerList[questions[currentQuestion].Position]*10}`).sttr("checked", "checked");
           }
 
-        }else if(questions[currentQuestion].type == 7){
-
+        }else if(questions[currentQuestion].type == "Picklist"){
+            let choices = questions[currentQuestion].choices.split(";")
             let options_html = "<option>Select Value</option>";
 
-            for(let i=0;i<questions[currentQuestion].choices.length;i++){
-                if(questions[currentQuestion].id in answerList && answerList[questions[currentQuestion].id] == questions[currentQuestion].choices[i]){
-                    options_html += `<option value="${questions[currentQuestion].choices[i]}" selected>${questions[currentQuestion].choices[i]}</option>`;
+            for(let i=0;i<choices.length;i++){
+                if(questions[currentQuestion].Position in answerList && answerList[questions[currentQuestion].Position] == choices[i]){
+                    options_html += `<option value="${choices[i]}" selected>${choices[i]}</option>`;
                 }else{
-                    options_html += `<option value="${questions[currentQuestion].choices[i]}">${questions[currentQuestion].choices[i]}</option>`;
+                    options_html += `<option value="${choices[i]}">${choices[i]}</option>`;
                 }
                
             }
@@ -336,8 +371,32 @@ function displayQuestion() {
              choiceContainer.innerHTML = `<select id="select_${currentQuestion}" class="form-control">${options_html}</select>`;
 
 
-        }
+        }else if(questions[currentQuestion].type == "Text"){
 
+            let input_html = `<input type="text" class="form-control active" name="" id="input_${currentQuestion}" >`;
+            choiceContainer.innerHTML = input_html;
+
+            if(questions[currentQuestion].Position in answerList){
+
+                document.querySelector(`#input_${currentQuestion}`).value = answerList[questions[currentQuestion].Position]
+            }
+        }else if(questions[currentQuestion].type == "Multi-Select Picklist"){
+            let choices = questions[currentQuestion].choices.split(";")
+            let options_html = "";
+
+            for(let i=0;i<choices.length;i++){
+                if(questions[currentQuestion].Position in answerList && answerList[questions[currentQuestion].Position].includes(choices[i])){
+                    options_html += `<option value="${choices[i]}" selected>${choices[i]}</option>`;
+                }else{
+                    options_html += `<option value="${choices[i]}">${choices[i]}</option>`;
+                }
+               
+            }
+          
+             choiceContainer.innerHTML = `<select id="select_${currentQuestion}" class="form-control" multiple>${options_html}</select>`;
+
+
+        }
 
    
 
@@ -367,34 +426,39 @@ function multipleselectAnswer(){
 function checkAnswer() {
     let question_id = document.querySelector('#questionId');
 
-    if(questions[currentQuestion].type == 1 && $('.active').map((_,el) => el.value).get().length !=0 ){
+    if(questions[currentQuestion].type == "Radio" && $('.active').map((_,el) => el.value).get().length !=0 ){
         // alert($('.active').map((_,el) => el.value).get());
         answerList[question_id.getAttribute('value')] = $('.active').map((_,el) => el.value).get();
-    }else if(questions[currentQuestion].type == 2 && $('.active').map((_,el) => el.value).get().length !=0){
+    }else if(questions[currentQuestion].type == "Checkbox" && $('.active').map((_,el) => el.value).get().length !=0){
         answerList[question_id.getAttribute('value')] = $('.active').map((_,el) => el.value).get();
-    }else if(questions[currentQuestion].type == 4 && document.querySelector(`input[name="rating${currentQuestion}"]:checked`) != null){
+    }else if(questions[currentQuestion].type == "NPS" && document.querySelector(`input[name="rating${currentQuestion}"]:checked`) != null){
         answerList[question_id.getAttribute('value')] = document.querySelector(`input[name="rating${currentQuestion}"]:checked`).value;
-    }else if(questions[currentQuestion].type == 5 && document.querySelector(`.likertRadio:checked`) != null ){
+    }else if(questions[currentQuestion].type == "Likert" && document.querySelector(`.likertRadio:checked`) != null ){
+        let tag = questions[currentQuestion].Tag.split(";")
         answerList[question_id.getAttribute('value')] = {};
-        for(let i=0;i<questions[currentQuestion].tag.length;i++){
+        for(let i=0;i<tag.length;i++){
             if(document.querySelector(`input[id="${currentQuestion}${i}"]:checked`)){
-                answerList[question_id.getAttribute('value')][questions[currentQuestion].tag[i]] = document.querySelector(`input[id="${currentQuestion}${i}"]:checked`).value;
+                answerList[question_id.getAttribute('value')][tag[i]] = document.querySelector(`input[id="${currentQuestion}${i}"]:checked`).value;
             }
             
         }
         // answerList[question_id.getAttribute('value')] = document.querySelector(`input[name="rating${currentQuestion}"]:checked`).value;
-    }else if (questions[currentQuestion].type == 3 && document.querySelector(`#text_area_${currentQuestion}`).value != ""){
+    }else if (questions[currentQuestion].type == "TextArea" && document.querySelector(`#text_area_${currentQuestion}`).value != ""){
         answerList[question_id.getAttribute('value')] = document.querySelector(`#text_area_${currentQuestion}`).value;
-    }else if(questions[currentQuestion].type == 6 && document.querySelector(`input[name="rating${currentQuestion}"]:checked`) != null){
+    }else if(questions[currentQuestion].type == "Rating" && document.querySelector(`input[name="rating${currentQuestion}"]:checked`) != null){
         answerList[question_id.getAttribute('value')] = document.querySelector(`input[name="rating${currentQuestion}"]:checked`).value/20;
-    }else if(questions[currentQuestion].type == 7 && document.querySelector(`#select_${currentQuestion}`).value != ""){
+    }else if(questions[currentQuestion].type == "Picklist" && document.querySelector(`#select_${currentQuestion}`).value != ""){
         answerList[question_id.getAttribute('value')] = document.querySelector(`#select_${currentQuestion}`).value;
+    }else if (questions[currentQuestion].type == "Text" && document.querySelector(`#input_${currentQuestion}`).value != ""){
+        answerList[question_id.getAttribute('value')] = document.querySelector(`#input_${currentQuestion}`).value;
+    }else if (questions[currentQuestion].type == "Multi-Select Picklist" && document.querySelector(`#select_${currentQuestion}`).value != ""){
+        answerList[question_id.getAttribute('value')] =$(`#select_${currentQuestion}`).val();
     }
 
 
-    progress_value = ((Object.keys(answerList).length*100)/questions.length) - 1
+    progress_value = ((Object.keys(answerList).length*100)/questions.length);
     topbar.progress('.'+progress_value)
-    // alert(JSON.stringify(answerList))
+    // alert(JSON.stringify(answerList),progress_value)
     setTimeout(nextQuestion,500);
 
 

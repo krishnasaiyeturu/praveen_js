@@ -86,7 +86,7 @@ topbar.show();
 
 // var questions = "";
 
-// var surveyID = document.getElementById("myHiddenId").value;
+var surveyID = document.getElementById("myHiddenId").value;
 
 
 // fetch(`https://online.syngenta.com/ampscript1?surveyID=${surveyID}`).then(res => res.text()).then((text) =>{
@@ -100,7 +100,7 @@ topbar.show();
 
 var questions = "";
 
-fetch(`https://online.syngenta.com/ampscript1`).then(res => {console.log(res)}).then((data) =>{
+fetch(`https://online.syngenta.com/ampscript1?surveyID=${surveyID}`).then(res => {console.log(res)}).then((data) =>{
     console.log(data);
     questions = data
     displayQuestion();

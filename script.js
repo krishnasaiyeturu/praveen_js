@@ -98,90 +98,101 @@ topbar.show();
 // })
 
 
+var questions = "";
+
+fetch(`https://online.syngenta.com/ampscript1`).then(res => {console.log(res)}).then((data) =>{
+    console.log(data);
+    questions = data
+    displayQuestion();
+}).catch((err) =>{
+    console.log(err)
+})
 
 
 
 
 
-var questions = [
-    {
-        "Position": "1",
-        "type": "NPS",
-        "question": "NPS Survey Question?",
-        "choices": "",
-        "Tag": ""
-    },
-    {
-        "Position": "2",
-        "type": "Radio",
-        "question": "Customer Satisfaction Survey?",
-        "choices": "Not satisfied at all; Somewhat unsatisfied; Neutral, Somewhat satisfied; Completely satisfied",
-        "Tag": ""
-    },
 
-{
-        "Position": "3",
-        "type": "Likert",
-        "question": "Please provide your feedback about Syngenta Experience",
-        "choices": "Very Bad; Bad; Average; Good; Best",
-        "Tag": "Responses; Deliverability; Customer Satisfaction"
-    },
 
-{
-        "Position": "4",
-        "type": "Picklist",
-        "question": "Select Picklist example?",
-        "choices": "One; Two; Three; Four; Five",
-        "Tag": ""
-    },
+// var questions = [
+//     {
+//         "Position": "1",
+//         "type": "NPS",
+//         "question": "NPS Survey Question?",
+//         "choices": "",
+//         "Tag": ""
+//     },
+//     {
+//         "Position": "2",
+//         "type": "Radio",
+//         "question": "Customer Satisfaction Survey?",
+//         "choices": "Not satisfied at all; Somewhat unsatisfied; Neutral, Somewhat satisfied; Completely satisfied",
+//         "Tag": ""
+//     },
 
-{
-        "Position": "5",
-        "type": "Multi-Select Picklist",
-        "question": "Multi-Select Picklist?",
-        "choices": "One; Two; Three; Four; Five",
-        "Tag": ""
-    },
+// {
+//         "Position": "3",
+//         "type": "Likert",
+//         "question": "Please provide your feedback about Syngenta Experience",
+//         "choices": "Very Bad; Bad; Average; Good; Best",
+//         "Tag": "Responses; Deliverability; Customer Satisfaction"
+//     },
 
-{
-        "Position": "6",
-        "type": "Checkbox",
-        "question": "Check Box example?",
-        "choices": "One; Two; Three; Four; Five",
-        "Tag": ""
-    },
+// {
+//         "Position": "4",
+//         "type": "Picklist",
+//         "question": "Select Picklist example?",
+//         "choices": "One; Two; Three; Four; Five",
+//         "Tag": ""
+//     },
 
-{
-        "Position": "7",
-        "type": "Rating",
-        "question": "Rating example?",
-        "choices": "",
-        "Tag": ""
-    },
+// {
+//         "Position": "5",
+//         "type": "Multi-Select Picklist",
+//         "question": "Multi-Select Picklist?",
+//         "choices": "One; Two; Three; Four; Five",
+//         "Tag": ""
+//     },
 
-{
-        "Position": "8",
-        "type": "Text",
-        "question": "Text Question example?",
-        "choices": "",
-        "Tag": ""
-    },
+// {
+//         "Position": "6",
+//         "type": "Checkbox",
+//         "question": "Check Box example?",
+//         "choices": "One; Two; Three; Four; Five",
+//         "Tag": ""
+//     },
 
-{
-        "Position": "9",
-        "type": "TextArea",
-        "question": "TextArea example",
-        "choices": "",
-        "Tag": ""
-    },
-]
+// {
+//         "Position": "7",
+//         "type": "Rating",
+//         "question": "Rating example?",
+//         "choices": "",
+//         "Tag": ""
+//     },
+
+// {
+//         "Position": "8",
+//         "type": "Text",
+//         "question": "Text Question example?",
+//         "choices": "",
+//         "Tag": ""
+//     },
+
+// {
+//         "Position": "9",
+//         "type": "TextArea",
+//         "question": "TextArea example",
+//         "choices": "",
+//         "Tag": ""
+//     },
+// ]
 
 
 
 // topbar.progress('+.'+progress_value)
 
 
-displayQuestion();
+
 
 
 

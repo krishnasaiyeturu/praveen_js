@@ -490,9 +490,11 @@ function checkAnswer() {
 
 function submitAnswer(){
     checkAnswer()
-    alert(JSON.stringify(answerList))
+    // alert(JSON.stringify(answerList))
 
-
+    for(let i=0;i<questions.length;i++){
+        finalanswerList[`qstn${questions[i].Position}`]  = answerList[`${questions[i].Position}`]
+    }
 
     
     

@@ -103,6 +103,7 @@ fetch(`https://online.syngenta.com/ampscript1?surveyID=${surveyID}`).then(res =>
         finalanswerList[`surveyID`]  = surveyID
         finalanswerList[`thankURL`]  = `https://www.syngenta.co.za/`
         finalanswerList[`submit`] = "Submit"
+        finalanswerList[`currency`] = "USD"
 
 
 
@@ -496,6 +497,11 @@ function submitAnswer(){
         finalanswerList[`qstn${questions[i].Position}`]  = answerList[`${questions[i].Position}`]
     }
 
+    let form_data = new FormData();
+
+    for ( var key in finalanswerList ) {
+        form_data.append(key, finalanswerList[key]);
+    }
     
     
     fetch("https://online.syngenta.com/GL_SurveySubmission",{
@@ -504,12 +510,12 @@ function submitAnswer(){
       'Content-Type': 'application/json'
     },
     method: "POST",
-    body: JSON.stringify(finalanswerList)
+    body: form_data
 })
 .then(function(res){ console.log(res) })
 .catch(function(res){ console.log(res) })
 
-    reloadApp();
+    // reloadApp();
 
 }
 

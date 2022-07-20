@@ -9,6 +9,7 @@ const saveBtncontainer = document.querySelector('#savebuttoncontainer');
 let choice_id = 65; //for letter A
 let progress_value = 0;
 const answerList = {};
+const finalanswerList = {};
 
 
 document.addEventListener('keypress', function(e) {
@@ -87,26 +88,31 @@ topbar.show();
 // var questions = "";
 
 var surveyID = document.getElementById("myHiddenId").value;
-
-
-// fetch(`https://online.syngenta.com/ampscript1?surveyID=${surveyID}`).then(res => res.text()).then((text) =>{
-//     console.log(text);
-//     console.log(JSON.parse(text));
-
-// }).catch((err) =>{
-//     console.log(err);
-// })
-
-
 var questions = "";
 
-fetch(`https://online.syngenta.com/ampscript1?surveyID=${surveyID}`).then(res => {console.log(res)}).then((data) =>{
-    console.log(data);
-    questions = data
+fetch(`https://online.syngenta.com/ampscript1?surveyID=${surveyID}`).then(res => res.text()).then((text) =>{
+    console.log(text);
+    console.log(JSON.parse(text));
+    questions = JSON.parse(text)
+    for(let i=0;i<questions.length;i++){
+        finalanswerList[`qstnID${questions[i].Position}`] = questions[i].qstnID
+        finalanswerList[`qstnNo${questions[i].Position}`] = questions[i].qstnNo
+        finalanswerList[`qstnTitle${questions[i].Position}`] = questions[i].question
+        finalanswerList[`qstnType${questions[i].Position}`] = questions[i].type
+        finalanswerList[`qstn${questions[i].Position}`]  = ""
+        finalanswerList[`surveyID`]  = surveyID
+        finalanswerList[`thankURL`]  = `https://www.syngenta.co.za/`
+        finalanswerList[`submit`] = "Submit"
+
+
+
+    }
     displayQuestion();
+
 }).catch((err) =>{
-    console.log(err)
+    console.log(err);
 })
+
 
 
 
@@ -214,6 +220,8 @@ function displayQuestion() {
 
         ok_button = `<button id="okButton" class="btn" onclick="checkAnswer()">OK</button>`;
         sumbit_button = `<button id="okButton" class="btn" onclick="submitAnswer()">Submit</button>`;
+
+        submit_button = `<input class="button" type="submit" id="submit" name="submit" value="Submit"  />`;
 
         if(currentQuestion+1 == questions.length){
             saveBtncontainer.innerHTML = sumbit_button;
@@ -384,6 +392,9 @@ function displayQuestion() {
 
         }else if(questions[currentQuestion].type == "Text"){
 
+            // <input type="hidden" name="qstnID${questions[currentQuestion].Position}" value="${questions[currentQuestion].qstnID}">
+            // <input type="hidden" name="qstnNo${questions[currentQuestion].Position}" value="${questions[currentQuestion].qstnNo}">`
+
             let input_html = `<input type="text" class="form-control active" name="" id="input_${currentQuestion}" >`;
             choiceContainer.innerHTML = input_html;
 
@@ -461,6 +472,7 @@ function checkAnswer() {
     }else if(questions[currentQuestion].type == "Picklist" && document.querySelector(`#select_${currentQuestion}`).value != ""){
         answerList[question_id.getAttribute('value')] = document.querySelector(`#select_${currentQuestion}`).value;
     }else if (questions[currentQuestion].type == "Text" && document.querySelector(`#input_${currentQuestion}`).value != ""){
+
         answerList[question_id.getAttribute('value')] = document.querySelector(`#input_${currentQuestion}`).value;
     }else if (questions[currentQuestion].type == "Multi-Select Picklist" && document.querySelector(`#select_${currentQuestion}`).value != ""){
         answerList[question_id.getAttribute('value')] =$(`#select_${currentQuestion}`).val();
@@ -479,6 +491,22 @@ function checkAnswer() {
 function submitAnswer(){
     checkAnswer()
     alert(JSON.stringify(answerList))
+
+
+
+    
+    
+    fetch("https://online.syngenta.com/GL_SurveySubmission",{
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    method: "POST",
+    body: JSON.stringify(finalanswerList)
+})
+.then(function(res){ console.log(res) })
+.catch(function(res){ console.log(res) })
+
     reloadApp();
 
 }

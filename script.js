@@ -505,10 +505,6 @@ function submitAnswer(){
     
     
     fetch("https://online.syngenta.com/GL_SurveySubmission",{
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
     method: "POST",
     body: form_data
 })

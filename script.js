@@ -1,3 +1,29 @@
+let top_color='rgb(4, 69, 175)';
+function themeGreen() {
+    document.body.classList.remove('blue');
+    document.body.classList.add('green');
+    top_color=	'rgb(0,100,0)';
+  }
+  
+  function themeBlue() {
+    document.body.classList.remove('green')
+    document.body.classList.add('blue')
+    top_color=	'rgb(4, 69, 175)';
+    
+  }
+
+ let themeChange= document.getElementById('theme');
+ themeChange.addEventListener('change',()=>{
+
+if(themeChange.value=='green'){
+    themeGreen();
+    configTopBar();
+}else{
+    themeBlue();
+    configTopBar();
+}
+ })
+  
 let currentQuestion = 0;
 let currentScore = 0; 
 let resultContainer = document.querySelector('#result-container');
@@ -62,18 +88,19 @@ document.getElementById("previousQuestion").disabled = true;
 
 
 // Top progress bar configuration
-
+function configTopBar(){
 topbar.config({
     autoRun      : false,
     barThickness : 4,
     barColors    : {
-        '0'      : 'rgb(4, 69, 175)',
+        '0'      : top_color,
     },
     shadowBlur   : 10,
-    shadowColor  : 'rgb(4, 69, 175);'
+    shadowColor  : top_color
   })
 topbar.show();
-
+}
+configTopBar();
 
 // single select = 1   - Radio
 // multiple select = 2   - Checkbox
@@ -87,8 +114,12 @@ topbar.show();
 
 // var questions = "";
 
-var surveyID = document.getElementById("myHiddenId").value;
-var questions = "";
+// var surveyID = document.getElementById("myHiddenId").value;
+// var questions =  [{"Position":"1","qstnID":"aES3V0000008PQCWA2","qstnNo":"SQ-001893","type":"NPS","question":"NPS Survey Question?","choices":"","Tag":""},{"Position":"2","qstnID":"aES3V0000008PQHWA2","qstnNo":"SQ-001894","type":"Radio","question":"Customer Satisfaction Survey?","choices":"Not satisfied at all; Somewhat unsatisfied; Neutral, Somewhat satisfied; Completely satisfied","Tag":""},{"Position":"3","qstnID":"aES3V0000008PQMWA2","qstnNo":"SQ-001895","type":"Likert","question":"Please provide your feedback about Syngenta Experience","choices":"Very Bad; Bad; Average; Good; Best","Tag":"Responses; Deliverability; Customer Satisfaction"},{"Position":"4","qstnID":"aES3V0000008PQNWA2","qstnNo":"SQ-001896","type":"Picklist","question":"Select Picklist example?","choices":"One; Two; Three; Four; Five","Tag":""},{"Position":"5","qstnID":"aES3V0000008PQRWA2","qstnNo":"SQ-001897","type":"Multi-Select Picklist","question":"Multi-Select Picklist?","choices":"One; Two; Three; Four; Five","Tag":""},{"Position":"6","qstnID":"aES3V0000008PQOWA2","qstnNo":"SQ-001898","type":"Checkbox","question":"Check Box example?","choices":"One; Two; Three; Four; Five","Tag":""},{"Position":"7","qstnID":"aES3V0000008PQWWA2","qstnNo":"SQ-001899","type":"Rating","question":"Rating example?","choices":"","Tag":""},{"Position":"8","qstnID":"aES3V0000008PQbWAM","qstnNo":"SQ-001900","type":"Text","question":"Text Question example?","choices":"","Tag":""},{"Position":"9","qstnID":"aES3V0000008PQgWAM","qstnNo":"SQ-001901","type":"TextArea","question":"TextArea example","choices":"","Tag":""}];
+
+// displayQuestion();
+
+var questions ="";
 
 fetch(`https://online.syngenta.com/ampscript1?surveyID=${surveyID}`).then(res => res.text()).then((text) =>{
     console.log(text);
@@ -120,79 +151,6 @@ fetch(`https://online.syngenta.com/ampscript1?surveyID=${surveyID}`).then(res =>
 
 
 
-
-// var questions = [
-//     {
-//         "Position": "1",
-//         "type": "NPS",
-//         "question": "NPS Survey Question?",
-//         "choices": "",
-//         "Tag": ""
-//     },
-//     {
-//         "Position": "2",
-//         "type": "Radio",
-//         "question": "Customer Satisfaction Survey?",
-//         "choices": "Not satisfied at all; Somewhat unsatisfied; Neutral, Somewhat satisfied; Completely satisfied",
-//         "Tag": ""
-//     },
-
-// {
-//         "Position": "3",
-//         "type": "Likert",
-//         "question": "Please provide your feedback about Syngenta Experience",
-//         "choices": "Very Bad; Bad; Average; Good; Best",
-//         "Tag": "Responses; Deliverability; Customer Satisfaction"
-//     },
-
-// {
-//         "Position": "4",
-//         "type": "Picklist",
-//         "question": "Select Picklist example?",
-//         "choices": "One; Two; Three; Four; Five",
-//         "Tag": ""
-//     },
-
-// {
-//         "Position": "5",
-//         "type": "Multi-Select Picklist",
-//         "question": "Multi-Select Picklist?",
-//         "choices": "One; Two; Three; Four; Five",
-//         "Tag": ""
-//     },
-
-// {
-//         "Position": "6",
-//         "type": "Checkbox",
-//         "question": "Check Box example?",
-//         "choices": "One; Two; Three; Four; Five",
-//         "Tag": ""
-//     },
-
-// {
-//         "Position": "7",
-//         "type": "Rating",
-//         "question": "Rating example?",
-//         "choices": "",
-//         "Tag": ""
-//     },
-
-// {
-//         "Position": "8",
-//         "type": "Text",
-//         "question": "Text Question example?",
-//         "choices": "",
-//         "Tag": ""
-//     },
-
-// {
-//         "Position": "9",
-//         "type": "TextArea",
-//         "question": "TextArea example",
-//         "choices": "",
-//         "Tag": ""
-//     },
-// ]
 
 
 
@@ -511,7 +469,7 @@ function submitAnswer(){
 .then(function(res){ console.log(res) })
 .catch(function(res){ console.log(res) })
 
-    // reloadApp();
+    reloadApp();
 
 }
 
@@ -543,7 +501,7 @@ function previousQuestion() {
 
 
 function reloadApp(){
-    window.location.reload();
+    window.location.replace(finalanswerList[`thankURL`]);
 }
 
 

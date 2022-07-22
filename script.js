@@ -466,7 +466,7 @@ function submitAnswer(){
 .then(function(res){ console.log(res) })
 .catch(function(res){ console.log(res) })
 
-    // reloadApp();
+    reloadApp();
 
 }
 
@@ -498,7 +498,7 @@ function previousQuestion() {
 
 
 function reloadApp(){
-    window.location.reload();
+    window.location.replace( finalanswerList[`thankURL`]);
 }
 
 

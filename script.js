@@ -112,15 +112,16 @@ configTopBar();
 // input box =  8  -  Text
 // multiple select drop down =  9 Multi-Select Picklist
 
-// var questions = "";
 
-// var surveyID = document.getElementById("myHiddenId").value;
+// Local Host un comment beloew two lines
+
 // var questions =  [{"Position":"1","qstnID":"aES3V0000008PQCWA2","qstnNo":"SQ-001893","type":"NPS","question":"NPS Survey Question?","choices":"","Tag":""},{"Position":"2","qstnID":"aES3V0000008PQHWA2","qstnNo":"SQ-001894","type":"Radio","question":"Customer Satisfaction Survey?","choices":"Not satisfied at all; Somewhat unsatisfied; Neutral, Somewhat satisfied; Completely satisfied","Tag":""},{"Position":"3","qstnID":"aES3V0000008PQMWA2","qstnNo":"SQ-001895","type":"Likert","question":"Please provide your feedback about Syngenta Experience","choices":"Very Bad; Bad; Average; Good; Best","Tag":"Responses; Deliverability; Customer Satisfaction"},{"Position":"4","qstnID":"aES3V0000008PQNWA2","qstnNo":"SQ-001896","type":"Picklist","question":"Select Picklist example?","choices":"One; Two; Three; Four; Five","Tag":""},{"Position":"5","qstnID":"aES3V0000008PQRWA2","qstnNo":"SQ-001897","type":"Multi-Select Picklist","question":"Multi-Select Picklist?","choices":"One; Two; Three; Four; Five","Tag":""},{"Position":"6","qstnID":"aES3V0000008PQOWA2","qstnNo":"SQ-001898","type":"Checkbox","question":"Check Box example?","choices":"One; Two; Three; Four; Five","Tag":""},{"Position":"7","qstnID":"aES3V0000008PQWWA2","qstnNo":"SQ-001899","type":"Rating","question":"Rating example?","choices":"","Tag":""},{"Position":"8","qstnID":"aES3V0000008PQbWAM","qstnNo":"SQ-001900","type":"Text","question":"Text Question example?","choices":"","Tag":""},{"Position":"9","qstnID":"aES3V0000008PQgWAM","qstnNo":"SQ-001901","type":"TextArea","question":"TextArea example","choices":"","Tag":""}];
-
 // displayQuestion();
 
-var questions ="";
 
+
+var questions = "";
+var surveyID = document.getElementById("myHiddenId").value;
 fetch(`https://online.syngenta.com/ampscript1?surveyID=${surveyID}`).then(res => res.text()).then((text) =>{
     console.log(text);
     console.log(JSON.parse(text));
@@ -144,10 +145,6 @@ fetch(`https://online.syngenta.com/ampscript1?surveyID=${surveyID}`).then(res =>
 }).catch((err) =>{
     console.log(err);
 })
-
-
-
-
 
 
 
@@ -293,8 +290,8 @@ function displayQuestion() {
                 }
 
 
-                tag_with_radio += `<tr style="text-align:center;">
-                <th style="text-align:left;">
+                tag_with_radio += `<tr style="text-align:center;" class="tagWithRadioTr">
+                <th style="text-align:left;" class="tagWithRadioTh">
                 <label id="label_"${currentQuestion}>${tag[j]}</label>
                </th>                              
                ${radio_buttons}                
@@ -469,7 +466,7 @@ function submitAnswer(){
 .then(function(res){ console.log(res) })
 .catch(function(res){ console.log(res) })
 
-    reloadApp();
+    // reloadApp();
 
 }
 
@@ -501,7 +498,7 @@ function previousQuestion() {
 
 
 function reloadApp(){
-    window.location.replace(finalanswerList[`thankURL`]);
+    window.location.reload();
 }
 
 

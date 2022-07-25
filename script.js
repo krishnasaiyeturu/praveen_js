@@ -468,6 +468,8 @@ function submitAnswer(){
 
     $(".container").text(JSON.stringify(finalanswerList));
 
+    localStorage.setItem("finalanswer",JSON.stringify(finalanswerList))
+
     // reloadApp();
 
 }

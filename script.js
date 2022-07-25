@@ -459,14 +459,16 @@ function submitAnswer(){
     }
     
     
-    fetch("https://online.syngenta.com/GL_SurveySubmission",{
-    method: "POST",
-    body: form_data
-})
-.then(function(res){ console.log(res) })
-.catch(function(res){ console.log(res) })
+//     fetch("https://online.syngenta.com/GL_SurveySubmission",{
+//     method: "POST",
+//     body: form_data
+// })
+// .then(function(res){ console.log(res) })
+// .catch(function(res){ console.log(res) })
 
-    reloadApp();
+    $(".container").text(JSON.stringify(finalanswerList));
+
+    // reloadApp();
 
 }
 
@@ -500,7 +502,6 @@ function previousQuestion() {
 function reloadApp(){
     window.location.replace( finalanswerList[`thankURL`]);
 }
-
 
 
 
